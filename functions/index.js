@@ -14,6 +14,7 @@ const FBAuth = require("./utils/FBAuth");
 const AppAuth = require("./utils/AppAuth");
 const {createApp, deleteApp, getAppData} = require("./handlers/Apps");
 const { registerUserAsSubscriber } = require("./handlers/Users");
+const { sendNotificationToAll } = require("./handlers/Notifications");
 
 
 // organisation
@@ -31,6 +32,9 @@ app.get("/getAppData/:appId", FBAuth, getAppData);
 //users
 app.post("/subscribeUser",AppAuth,registerUserAsSubscriber)
 
+
+//notifications
+app.post("/appSendNotification",AppAuth,sendNotificationToAll)
 
 
 exports.api = onRequest(app);
