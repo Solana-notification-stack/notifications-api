@@ -106,7 +106,7 @@ exports.loginOrganisation = (req, res) => {
 exports.getAuthenticatedOrganisation = (req, res) => {
   const orgData = {};
 
-  db.doc(`/organisation/${req.user.orgId}`)
+  db.doc(`/organisations/${req.user.orgId}`)
       .get()
       .then((doc) => {
         if (doc.exists) {
@@ -122,7 +122,7 @@ exports.getAuthenticatedOrganisation = (req, res) => {
 
           // Create an array of promises to fetch event details and team details for each registered event
           const appPromises = orgApps.map((app) => {
-            const appId = app.appId;
+            const appId = app
 
             // Fetch event details
             return db.collection("apps").doc(appId).get();
@@ -136,8 +136,9 @@ exports.getAuthenticatedOrganisation = (req, res) => {
         }
       })
       .then((results) => {
+     
         // Process event details and team details
-        orgData.registeredAppsData = results.map((appSnapshot) => appSnapshot.docs.map((doc) => doc.data()));
+        orgData.registeredAppsData = results.map((appSnapshot) => appSnapshot.data());
 
         return res.json(orgData);
       })

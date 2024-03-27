@@ -65,7 +65,7 @@ exports.deleteApp = (request, response) => {
 };
 
 exports.getAppData = (request, response) => {
-  const AppData = {};
+  let AppData;
   db.doc(`/apps/${request.params.appId}`).get()
       .then((doc) => {
         if (!doc.exists) {
