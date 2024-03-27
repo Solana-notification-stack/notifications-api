@@ -1,0 +1,274 @@
+[debug] [2024-03-27T07:23:20.963Z] ----------------------------------------------------------------------
+[debug] [2024-03-27T07:23:20.964Z] Command:       /opt/homebrew/Cellar/node/21.7.1/bin/node /opt/homebrew/bin/firebase serve
+[debug] [2024-03-27T07:23:20.964Z] CLI Version:   13.5.2
+[debug] [2024-03-27T07:23:20.965Z] Platform:      darwin
+[debug] [2024-03-27T07:23:20.965Z] Node Version:  v21.7.1
+[debug] [2024-03-27T07:23:20.965Z] Time:          Wed Mar 27 2024 12:53:20 GMT+0530 (India Standard Time)
+[debug] [2024-03-27T07:23:20.965Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-03-27T07:23:20.998Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-03-27T07:23:20.998Z] > authorizing via signed-in user (mailtoronakgupta@gmail.com)
+[debug] [2024-03-27T07:23:20.998Z] [iam] checking project solana-notifications for permissions ["firebase.projects.get"]
+[debug] [2024-03-27T07:23:20.999Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/solana-notifications:testIamPermissions [none]
+[debug] [2024-03-27T07:23:20.999Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/solana-notifications:testIamPermissions x-goog-quota-user=projects/solana-notifications
+[debug] [2024-03-27T07:23:20.999Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/solana-notifications:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-03-27T07:23:22.782Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/solana-notifications:testIamPermissions 200
+[debug] [2024-03-27T07:23:22.782Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/solana-notifications:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-03-27T07:23:22.783Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/solana-notifications [none]
+[debug] [2024-03-27T07:23:23.672Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/solana-notifications 200
+[debug] [2024-03-27T07:23:23.672Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/solana-notifications {"projectId":"solana-notifications","projectNumber":"624054315105","displayName":"solana-notifications","name":"projects/solana-notifications","resources":{"hostingSite":"solana-notifications"},"state":"ACTIVE","etag":"1_e89f855b-90ed-4a46-9efb-9abb8048e7d0"}
+[info] 
+[info] === Serving from '/Users/ronak/Desktop/react-native/notifications-api'...
+[info] 
+[debug] [2024-03-27T07:23:23.675Z] defaultcredentials: writing to file /Users/ronak/.config/firebase/mailtoronakgupta_gmail_com_application_default_credentials.json
+[debug] [2024-03-27T07:23:23.678Z] Setting GAC to /Users/ronak/.config/firebase/mailtoronakgupta_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/ronak/.config/firebase/mailtoronakgupta_gmail_com_application_default_credentials.json"}}
+[debug] [2024-03-27T07:23:23.678Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/solana-notifications/adminSdkConfig [none]
+[debug] [2024-03-27T07:23:24.070Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/solana-notifications/adminSdkConfig 200
+[debug] [2024-03-27T07:23:24.071Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/solana-notifications/adminSdkConfig {"projectId":"solana-notifications","storageBucket":"solana-notifications.appspot.com"}
+[info] i  functions: Watching "/Users/ronak/Desktop/react-native/notifications-api/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/ronak/Desktop/react-native/notifications-api/functions\" for Cloud Functions..."}}
+[debug] [2024-03-27T07:23:24.094Z] Validating nodejs source
+[debug] [2024-03-27T07:23:24.790Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase": "^10.9.0",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-03-27T07:23:24.790Z] Building nodejs source
+[debug] [2024-03-27T07:23:24.791Z] Failed to find version of module node: reached end of search path /Users/ronak/Desktop/react-native/notifications-api/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "21". Using node@21 from host. 
+[debug] [2024-03-27T07:23:24.793Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-03-27T07:23:24.798Z] Found firebase-functions binary at '/Users/ronak/Desktop/react-native/notifications-api/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8386
+
+[debug] [2024-03-27T07:23:25.079Z] Got response from /__/functions.yaml {"endpoints":{"api":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"api"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] ✔  functions: Loaded functions definitions from source: api. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: api."}}
+[info] ✔  functions[us-central1-api]: http function initialized (http://localhost:5000/solana-notifications/us-central1/api). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://localhost:5000/solana-notifications/us-central1/api)."}}
+[debug] [2024-03-27T07:25:47.131Z] File /Users/ronak/Desktop/react-native/notifications-api/functions/handlers/Organisations.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/ronak/Desktop/react-native/notifications-api/functions/handlers/Organisations.js changed, reloading triggers"}}
+[debug] [2024-03-27T07:25:48.136Z] Validating nodejs source
+[debug] [2024-03-27T07:25:49.251Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase": "^10.9.0",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-03-27T07:25:49.251Z] Building nodejs source
+[debug] [2024-03-27T07:25:49.255Z] Failed to find version of module node: reached end of search path /Users/ronak/Desktop/react-native/notifications-api/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "21". Using node@21 from host. 
+[debug] [2024-03-27T07:25:49.256Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-03-27T07:25:49.257Z] Found firebase-functions binary at '/Users/ronak/Desktop/react-native/notifications-api/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8036
+
+[debug] [2024-03-27T07:25:49.692Z] Got response from /__/functions.yaml {"endpoints":{"api":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"api"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[debug] [2024-03-27T07:25:53.881Z] File /Users/ronak/Desktop/react-native/notifications-api/functions/handlers/Organisations.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/ronak/Desktop/react-native/notifications-api/functions/handlers/Organisations.js changed, reloading triggers"}}
+[info] ✔  functions: Loaded functions definitions from source: api. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: api."}}
+[debug] [2024-03-27T07:25:54.882Z] Validating nodejs source
+[debug] [2024-03-27T07:25:55.542Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase": "^10.9.0",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-03-27T07:25:55.542Z] Building nodejs source
+[debug] [2024-03-27T07:25:55.542Z] Failed to find version of module node: reached end of search path /Users/ronak/Desktop/react-native/notifications-api/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "21". Using node@21 from host. 
+[debug] [2024-03-27T07:25:55.543Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-03-27T07:25:55.544Z] Found firebase-functions binary at '/Users/ronak/Desktop/react-native/notifications-api/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8429
+
+[debug] [2024-03-27T07:25:55.820Z] Got response from /__/functions.yaml {"endpoints":{"api":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"api"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] ✔  functions: Loaded functions definitions from source: api. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: api."}}
+[debug] [2024-03-27T07:26:15.023Z] File /Users/ronak/Desktop/react-native/notifications-api/functions/handlers/Organisations.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/ronak/Desktop/react-native/notifications-api/functions/handlers/Organisations.js changed, reloading triggers"}}
+[debug] [2024-03-27T07:26:16.025Z] Validating nodejs source
+[debug] [2024-03-27T07:26:16.751Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase": "^10.9.0",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-03-27T07:26:16.752Z] Building nodejs source
+[debug] [2024-03-27T07:26:16.752Z] Failed to find version of module node: reached end of search path /Users/ronak/Desktop/react-native/notifications-api/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "21". Using node@21 from host. 
+[debug] [2024-03-27T07:26:16.752Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-03-27T07:26:16.754Z] Found firebase-functions binary at '/Users/ronak/Desktop/react-native/notifications-api/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8475
+
+[debug] [2024-03-27T07:26:17.050Z] Got response from /__/functions.yaml {"endpoints":{"api":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"api"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] ✔  functions: Loaded functions definitions from source: api. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: api."}}
+[debug] [2024-03-27T07:28:16.908Z] File /Users/ronak/Desktop/react-native/notifications-api/functions/handlers/Organisations.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/ronak/Desktop/react-native/notifications-api/functions/handlers/Organisations.js changed, reloading triggers"}}
+[debug] [2024-03-27T07:28:17.918Z] Validating nodejs source
+[debug] [2024-03-27T07:28:18.664Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase": "^10.9.0",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-03-27T07:28:18.664Z] Building nodejs source
+[debug] [2024-03-27T07:28:18.664Z] Failed to find version of module node: reached end of search path /Users/ronak/Desktop/react-native/notifications-api/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "21". Using node@21 from host. 
+[debug] [2024-03-27T07:28:18.666Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-03-27T07:28:18.668Z] Found firebase-functions binary at '/Users/ronak/Desktop/react-native/notifications-api/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8963
+
+[debug] [2024-03-27T07:28:19.033Z] Got response from /__/functions.yaml {"endpoints":{"api":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"api"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] ✔  functions: Loaded functions definitions from source: api. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: api."}}
+[debug] [2024-03-27T07:28:35.370Z] File /Users/ronak/Desktop/react-native/notifications-api/functions/handlers/Organisations.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/ronak/Desktop/react-native/notifications-api/functions/handlers/Organisations.js changed, reloading triggers"}}
+[debug] [2024-03-27T07:28:36.373Z] Validating nodejs source
+[debug] [2024-03-27T07:28:37.029Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase": "^10.9.0",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-03-27T07:28:37.029Z] Building nodejs source
+[debug] [2024-03-27T07:28:37.029Z] Failed to find version of module node: reached end of search path /Users/ronak/Desktop/react-native/notifications-api/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "21". Using node@21 from host. 
+[debug] [2024-03-27T07:28:37.031Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-03-27T07:28:37.032Z] Found firebase-functions binary at '/Users/ronak/Desktop/react-native/notifications-api/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8119
+
+[debug] [2024-03-27T07:28:37.383Z] Got response from /__/functions.yaml {"endpoints":{"api":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"api"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] ✔  functions: Loaded functions definitions from source: api. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: api."}}
