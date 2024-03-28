@@ -1,8 +1,24 @@
-const { db, admin } = require("../utils/admin");
+const { db} = require("../utils/admin");
+const admin = require("firebase-admin");
 
+// Initialize Firebase Admin SDK instances
+const initializedApps = {};
+
+// Initialize Firebase Admin SDK for a given app ID
+function initializeFirebaseAdmin(json, appId) {
+  if (!initializedApps[appId]) {
+  
+    const firebaseApp = admin.initializeApp({
+      credential: admin.credential.cert(json),
+    }, `App-${appId}`);
+    initializedApps[appId] = firebaseApp;
+  }
+}
 exports.sendNotificationToAll = (req, res) => {
+
     const notificationBody = req.body.notificationBody;
     const notificationTitle = req.body.notificationTitle;
+    const notificationImage = req.body.notificationImage
     const appId = req.app.appId;
     
     let tokens = [];
@@ -34,17 +50,39 @@ exports.sendNotificationToAll = (req, res) => {
             }
         });
         console.log(tokens);
-        const payload = {
+        const message = {
+            tokens: tokens,
             notification: {
-                title: notificationTitle,
-                body: notificationBody
+              body: notificationBody,
+              title: notificationTitle,
             },
-            tokens
-        };
-        return admin.messaging().sendMulticast(payload);
+            apns: {
+              payload: {
+                aps: {
+                  'mutable-content': 1,
+                },
+              },
+              fcmOptions: {
+                imageUrl: notificationImage,
+              },
+            },
+            android: {
+              notification: {
+                imageUrl: notificationImage,
+              },
+            },
+          };
+        const service_account = {
+
+          } 
+
+        initializeFirebaseAdmin(service_account, appId);
+
+       
+        return initializedApps[appId].messaging().sendEachForMulticast(message);
     })
     .then(response => {
-        console.log("Successfully sent notifications:", response);
+        console.log("Successfully sent notifications:", response.responses[0].error);
         res.status(200).json({ message: "Successfully sent notifications" });
     })
     .catch(err => {
