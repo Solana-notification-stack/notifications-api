@@ -13,6 +13,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@solana/web3.js": "^1.91.3",
     "busboy": "^1.6.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -21,7 +22,7 @@
     "firebase": "^10.9.0",
     "firebase-admin": "^11.8.0",
     "firebase-functions": "^4.3.1",
-    "multer": "^1.4.5-lts.1",
+    "multer": "^1.4.3",
     "node-fetch": "^3.3.2",
     "uuidv4": "^6.2.13"
   },

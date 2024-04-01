@@ -14,7 +14,9 @@ const FBAuth = require("./utils/FBAuth");
 const AppAuth = require("./utils/AppAuth");
 const {createApp, deleteApp, getAppData} = require("./handlers/Apps");
 const { registerUserAsSubscriber } = require("./handlers/Users");
-const { sendNotificationToAll } = require("./handlers/Notifications");
+const { sendNotificationToAll, setNotificationForAccountChange, subscribeAccountChangeNotifForOne } = require("./handlers/Notifications");
+const upload = require("./utils/multerMiddleware");
+
 
 
 // organisation
@@ -24,7 +26,7 @@ app.post("/resetPassword", forgotPassword);
 app.get("/organisationData", FBAuth, getAuthenticatedOrganisation);
 
 //app
-app.post("/createApp", FBAuth, createApp);
+app.post("/createApp", FBAuth,upload.single("file"), createApp);
 app.post("/deleteApp/:appId", FBAuth, deleteApp);
 app.get("/getAppData/:appId", FBAuth, getAppData);
 
@@ -35,6 +37,9 @@ app.post("/subscribeUser",AppAuth,registerUserAsSubscriber)
 
 //notifications
 app.post("/appSendNotification",AppAuth,sendNotificationToAll)
+app.post("/app/setAccountChangeNotification",AppAuth,setNotificationForAccountChange)
+app.post("/app/subscibeOneForAccountChange",AppAuth,subscribeAccountChangeNotifForOne)
+
 
 
 exports.api = onRequest(app);

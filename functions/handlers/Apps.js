@@ -99,20 +99,17 @@ function generateAppSecretKey(appId, appName) {
 //       });
 // })
 // busboy.end(req.rawBody);}
-const multer = require('multer');
+// const multer = require('multer');
 const path = require("path");
-const os = require("os");
+// const os = require("os");
 const fs = require("fs");
 
 // Configure multer to handle only non-file fields
-const upload = multer().none();
+// const upload = multer().none();
 
 exports.createApp = (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      console.error(err);
-      return res.status(400).json({ error: 'Error uploading file' });
-    }
+  console.log("req",req.file)
+
 
     // Access the non-file fields including 'appName'
     const { appName } = req.body;
@@ -126,29 +123,6 @@ exports.createApp = (req, res) => {
     const appSecret = generateAppSecretKey(appId, appName);
     let service_account;
 
-    // Set up Multer storage for file uploads
-    const storage = multer.diskStorage({
-      destination: (req, file, cb) => {
-        cb(null, os.tmpdir()); // Temporary directory for storing uploaded files
-      },
-      filename: (req, file, cb) => {
-        const fileExtension = path.extname(file.originalname);
-        const fileName = `${Math.round(Math.random() * 1000000000000).toString()}.${fileExtension}`;
-        cb(null, fileName);
-      }
-    });
-
-    const upload = multer({ storage: storage }).single('file');
-
-    upload(req, res, (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(400).json({ error: 'Error uploading file' });
-      }
-
-      if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded' });
-      }
 
       // Upload file to storage bucket
       const generatedToken = uuid();
@@ -200,8 +174,7 @@ exports.createApp = (req, res) => {
           console.error(err);
           res.status(500).json({ error: "Something went wrong while creating the App." });
         });
-    });
-  });
+
 };
 
 
