@@ -313,3 +313,28 @@ exports.setNotificationForAccountChange = async(req,res)=>{
     }
 
 }
+
+exports.helius = async(req,res)=>{
+  try{
+
+  
+  const notification = req.body.notification
+  const appId = req.app.appId;
+  const appSnapshot = await db.collection("apps").doc(appId).get();
+  if (!appSnapshot.exists) {
+    throw new Error("App not found");
+  }
+
+  await db.collection("apps").doc(appId).update(
+      {
+          notificationAccountChanged:notification
+      }
+  )
+  
+  return res.status(200).json({message:"success"})
+  }catch(err){
+      console.log(err)
+      res.json({err})
+  }
+
+}
