@@ -111,39 +111,43 @@ exports.createApp = (req, res) => {
   upload(req, res, (err) => {
     if (err) {
       console.error(err);
-      return res.status(400).json({ error: 'Error uploading file' });
+      return res.status(400).json({ error: err.message });
     }
 
     // Access the non-file fields including 'appName'
-    const { appName } = req.body;
-    if (!appName) {
+  
+    const {appNames } = req.body;
+    console.log("appName",req.body)
+    if (!appNames) {
       return res.status(400).json({ error: 'Missing appName field' });
     }
 
     // Further processing of the API request
     const orgId = req.user.orgId;
-    const appId = generateUniqueAppId(appName);
-    const appSecret = generateAppSecretKey(appId, appName);
+    const appId = generateUniqueAppId(appNames);
+    const appSecret = generateAppSecretKey(appId, appNames);
     let service_account;
 
-    // Set up Multer storage for file uploads
-    const storage = multer.diskStorage({
-      destination: (req, file, cb) => {
-        cb(null, os.tmpdir()); // Temporary directory for storing uploaded files
-      },
-      filename: (req, file, cb) => {
-        const fileExtension = path.extname(file.originalname);
-        const fileName = `${Math.round(Math.random() * 1000000000000).toString()}.${fileExtension}`;
-        cb(null, fileName);
-      }
-    });
+    // // Set up Multer storage for file uploads
+    // const storage = multer.diskStorage({
+    //   destination: (req, file, cb) => {
+    //     cb(null, os.tmpdir()); // Temporary directory for storing uploaded files
+    //   },
+    //   filename: (req, file, cb) => {
+    //     const fileExtension = path.extname(file.originalname);
+    //     const fileName = `${Math.round(Math.random() * 1000000000000).toString()}.${fileExtension}`;
+    //     cb(null, fileName);
+    //   }
+    // });
 
-    const upload = multer({ storage: storage }).single('file');
+    // const upload = multer({ storage: storage }).single('file');
 
     upload(req, res, (err) => {
+      
       if (err) {
         console.error(err);
-        return res.status(400).json({ error: 'Error uploading file' });
+        return res.status(400).json({ error: err.message
+         });
       }
 
       if (!req.file) {
@@ -244,7 +248,7 @@ exports.getAppData = (request, response) => {
       })
       .catch((err) => {
         console.error(err);
-        response.status(500).json({error: err.message || "Something went wrong while fetching the App data."});
+        response.status(500).json({error:  "Something went wrong while fetching the App data."});
       });
 };
 

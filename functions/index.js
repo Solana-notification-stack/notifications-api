@@ -4,6 +4,7 @@ const app = express();
 const {setGlobalOptions} = require("firebase-functions/v2");
 const {onDocumentCreated} = require("firebase-functions/v2/firestore");
 require("dotenv").config();
+const upload=require('./fileStorage')
 
 setGlobalOptions({maxInstances: 10});
 app.use(cors());
@@ -17,14 +18,14 @@ const { registerUserAsSubscriber } = require("./handlers/Users");
 const { sendNotificationToAll } = require("./handlers/Notifications");
 
 
-// organisation
+// organisationh
 app.post("/signUpOrganisation", signUpOrganisation);
 app.post("/loginOrganisation", loginOrganisation);
 app.post("/resetPassword", forgotPassword);
 app.get("/organisationData", FBAuth, getAuthenticatedOrganisation);
 
 //app
-app.post("/createApp", FBAuth, createApp);
+app.post("/createApp", FBAuth,upload.single('file'), createApp);
 app.post("/deleteApp/:appId", FBAuth, deleteApp);
 app.get("/getAppData/:appId", FBAuth, getAppData);
 
