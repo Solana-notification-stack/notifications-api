@@ -16,197 +16,185 @@ function generateAppSecretKey(appId, appName) {
   return hash.substring(0, 32);
 } 
 
-// exports.createApp = (req, response) => {
-//   const Busboy = require("busboy");
-//     const path = require("path");
-//     const os = require("os");
-//     const fs = require("fs");
-//   const orgId = req.user.orgId;
-//   const appId = generateUniqueAppId(req.body.appName);
-//   const appSecret = generateAppSecretKey(appId, req.body.appName);
-// let service_account;
+exports.createApp = (req, response) => {
+  const Busboy = require("busboy");
+    const path = require("path");
+    const os = require("os");
+    const fs = require("fs");
+    const busboy = Busboy({ headers: req.headers });
+  const orgId = req.user.orgId;
+  let appName;
+  let appId;
+  let appSecret;
+
+
+let service_account;
+
+
+busboy.on('field', (fieldname, val) => {
+  
+  // Assuming the text field is named 'text'
+  if (fieldname === 'appName') {
+    console.log(`Field [${fieldname}]: value: ${val}`);
+  
+ appName= val;
+  appId = generateUniqueAppId(appName);
+ appSecret = generateAppSecretKey(appId, appName);
+  }
+});
 
 
 
-// const busboy = Busboy({ headers: req.headers });
 
-// let jsonfileToBeUploaded = {};
-// let jsonfileName;
-// let generatedToken = uuid();
+let jsonfileToBeUploaded = {};
+let jsonfileName;
+let generatedToken = uuid();
 
-// busboy.on("file", (fieldname, file, filename) => {
-//   let mimetype = filename.mimeType;
+busboy.on("file", (fieldname, file, filename) => {
+  console.log("file uploading .......")
+  let mimetype = filename.mimeType;
 
-//   const fileExtension =
-//     filename.filename.split(".")[filename.filename.split(".").length - 1];
-//   // 32756238461724837.png
-//   jsonfileName = `${Math.round(
-//     Math.random() * 1000000000000
-//   ).toString()}.${fileExtension}`;
-//   const filepath = path.join(os.tmpdir(), jsonfileName);
-//   jsonfileToBeUploaded = { filepath, mimetype };
-//   file.pipe(fs.createWriteStream(filepath));
-// });
-// busboy.on("finish", () => {
-//   admin
-//     .storage()
-//     .bucket()
-//     .upload(jsonfileToBeUploaded.filepath, {
-//       resumable: false,
-//       metadata: {
-//         metadata: {
-//           contentType: "application/json",
-//           firebaseStorageDownloadTokens: generatedToken,
-//         },
-//       },
-//     })
-//     .then(() => {
-//     service_account = `https://firebasestorage.googleapis.com/v0/b/solana-notifications.appspot.com/o${jsonfileName}?alt=media&token=${generatedToken}`;
+  const fileExtension =
+    filename.filename.split(".")[filename.filename.split(".").length - 1];
+  // 32756238461724837.png
+  jsonfileName = `${Math.round(
+    Math.random() * 1000000000000
+  ).toString()}.${fileExtension}`;
+  const filepath = path.join(os.tmpdir(), jsonfileName);
+  jsonfileToBeUploaded = { filepath, mimetype };
+  file.pipe(fs.createWriteStream(filepath));
+  console.log("jsonFile---->",jsonfileToBeUploaded)
+});
+busboy.on("finish", () => {
+  console.log("jsonFile2------>",jsonfileToBeUploaded.filepath)
+  admin
+    .storage()
+    .bucket()
+    .upload(jsonfileToBeUploaded.filepath, {
+      resumable: false,
+      metadata: {
+        metadata: {
+          contentType: "application/json",
+          firebaseStorageDownloadTokens: generatedToken,
+        },
+      },
+    })
+    .then(() => {
+    service_account = `https://firebasestorage.googleapis.com/v0/b/solana-notifications.appspot.com/o${jsonfileName}?alt=media&token=${generatedToken}`;
 
 
 
-//   const appDetails = {
-//     orgId,
-//     appName: req.body.appName,
-//     appId,
-//     appSecret,
-//     userIds: [],
-//     service_account
-//   };
+  const appDetails = {
+    orgId,
+    appName: appName,
+    appId,
+    appSecret,
+    userIds: [],
+    service_account
+  };
 
-//   return db.collection("apps").doc(appId).set(appDetails)})
-//       .then(() => {
-//         return db.doc(`/organisations/${orgId}`).get();
-//       })
-//       .then((orgDoc) => {
-//         const data = orgDoc.data();
-//         const registeredAppIds = data.registeredAppIds || [];
-//         registeredAppIds.push(appId);
-//         return db.doc(`/organisations/${orgId}`).update({
-//           registeredAppIds: registeredAppIds,
-//         });
-//       })
-//       .then(() => {
-//         response.status(200).json({message: "Created App successfully."});
-//       })
-//       .catch((err) => {
-//         console.error(err);
-//         if (err.message) {
-//           response.status(400).json({error: err.message});
-//         } else {
-//           response.status(500).json({error: "Something went wrong while creating the App."});
-//         }
-//       });
-// })
-// busboy.end(req.rawBody);}
-const multer = require('multer');
-const path = require("path");
-const os = require("os");
-const fs = require("fs");
+  return db.collection("apps").doc(appId).set(appDetails)})
+      .then(() => {
+        return db.doc(`/organisations/${orgId}`).get();
+      })
+      .then((orgDoc) => {
+        const data = orgDoc.data();
+        const registeredAppIds = data.registeredAppIds || [];
+        registeredAppIds.push(appId);
+        return db.doc(`/organisations/${orgId}`).update({
+          registeredAppIds: registeredAppIds,
+        });
+      })
+      .then(() => {
+        response.status(200).json({message: "Created App successfully."});
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.message) {
+          response.status(400).json({error: err.message});
+        } else {
+          response.status(500).json({error: "Something went wrong while creating the App."});
+        }
+      });
+})
+busboy.end(req.rawBody);}
+// const multer = require('multer');
+// const path = require("path");
+// // const os = require("os");
+// const fs = require("fs");
 
 // Configure multer to handle only non-file fields
-const upload = multer().none();
+// const upload = multer().none();
 
-exports.createApp = (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      console.error(err);
-      return res.status(400).json({ error: err.message });
-    }
+// exports.createApp = (req, res) => {
+//   console.log("req",req.file)
 
-    // Access the non-file fields including 'appName'
-  
-    const {appNames } = req.body;
-    console.log("appName",req.body)
-    if (!appNames) {
-      return res.status(400).json({ error: 'Missing appName field' });
-    }
 
-    // Further processing of the API request
-    const orgId = req.user.orgId;
-    const appId = generateUniqueAppId(appNames);
-    const appSecret = generateAppSecretKey(appId, appNames);
-    let service_account;
+//     // Access the non-file fields including 'appName'
+//     const { appName } = req.body;
+//     if (!appName) {
+//       return res.status(400).json({ error: 'Missing appName field' });
+//     }
 
-    // // Set up Multer storage for file uploads
-    // const storage = multer.diskStorage({
-    //   destination: (req, file, cb) => {
-    //     cb(null, os.tmpdir()); // Temporary directory for storing uploaded files
-    //   },
-    //   filename: (req, file, cb) => {
-    //     const fileExtension = path.extname(file.originalname);
-    //     const fileName = `${Math.round(Math.random() * 1000000000000).toString()}.${fileExtension}`;
-    //     cb(null, fileName);
-    //   }
-    // });
+//     // Further processing of the API request
+//     const orgId = req.user.orgId;
+//     const appId = generateUniqueAppId(appName);
+//     const appSecret = generateAppSecretKey(appId, appName);
+//     let service_account;
 
-    // const upload = multer({ storage: storage }).single('file');
 
-    upload(req, res, (err) => {
-      
-      if (err) {
-        console.error(err);
-        return res.status(400).json({ error: err.message
-         });
-      }
+//       // Upload file to storage bucket
+//       const generatedToken = uuid();
+//       const fileExtension = path.extname(req.file.originalname);
+//       const jsonfileName = `${Math.round(Math.random() * 1000000000000).toString()}.${fileExtension}`;
+//       const fileData = fs.readFileSync(req.file.path);
 
-      if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded' });
-      }
+//       admin.storage().bucket()
+//         .file(jsonfileName)
+//         .save(fileData, {
+//           resumable: false,
+//           metadata: {
+//             contentType: 'application/json',
+//             metadata: {
+//               firebaseStorageDownloadTokens: generatedToken
+//             }
+//           }
+//         })
+//         .then(() => {
+//           service_account = `https://firebasestorage.googleapis.com/v0/b/solana-notifications.appspot.com/o/${jsonfileName}?alt=media&token=${generatedToken}`;
 
-      // Upload file to storage bucket
-      const generatedToken = uuid();
-      const fileExtension = path.extname(req.file.originalname);
-      const jsonfileName = `${Math.round(Math.random() * 1000000000000).toString()}.${fileExtension}`;
-      const fileData = fs.readFileSync(req.file.path);
+//           const appDetails = {
+//             orgId,
+//             appName,
+//             appId,
+//             appSecret,
+//             userIds: [],
+//             service_account
+//           };
 
-      admin.storage().bucket()
-        .file(jsonfileName)
-        .save(fileData, {
-          resumable: false,
-          metadata: {
-            contentType: 'application/json',
-            metadata: {
-              firebaseStorageDownloadTokens: generatedToken
-            }
-          }
-        })
-        .then(() => {
-          service_account = `https://firebasestorage.googleapis.com/v0/b/solana-notifications.appspot.com/o/${jsonfileName}?alt=media&token=${generatedToken}`;
+//           // Save app details to database
+//           return db.collection("apps").doc(appId).set(appDetails);
+//         })
+//         .then(() => {
+//           return db.doc(`/organisations/${orgId}`).get();
+//         })
+//         .then((orgDoc) => {
+//           const data = orgDoc.data();
+//           const registeredAppIds = data.registeredAppIds || [];
+//           registeredAppIds.push(appId);
+//           return db.doc(`/organisations/${orgId}`).update({
+//             registeredAppIds: registeredAppIds,
+//           });
+//         })
+//         .then(() => {
+//           res.status(200).json({ message: "Created App successfully." });
+//         })
+//         .catch((err) => {
+//           console.error(err);
+//           res.status(500).json({ error: "Something went wrong while creating the App." });
+//         });
 
-          const appDetails = {
-            orgId,
-            appName,
-            appId,
-            appSecret,
-            userIds: [],
-            service_account
-          };
-
-          // Save app details to database
-          return db.collection("apps").doc(appId).set(appDetails);
-        })
-        .then(() => {
-          return db.doc(`/organisations/${orgId}`).get();
-        })
-        .then((orgDoc) => {
-          const data = orgDoc.data();
-          const registeredAppIds = data.registeredAppIds || [];
-          registeredAppIds.push(appId);
-          return db.doc(`/organisations/${orgId}`).update({
-            registeredAppIds: registeredAppIds,
-          });
-        })
-        .then(() => {
-          res.status(200).json({ message: "Created App successfully." });
-        })
-        .catch((err) => {
-          console.error(err);
-          res.status(500).json({ error: "Something went wrong while creating the App." });
-        });
-    });
-  });
-};
+// };
 
 
 exports.deleteApp = (request, response) => {

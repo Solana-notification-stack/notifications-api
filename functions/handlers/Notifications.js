@@ -93,12 +93,17 @@
 
 const { db } = require("../utils/admin");
 const admin = require("firebase-admin");
-
-
+const  { Connection, PublicKey, LAMPORTS_PER_SOL, }  = require("@solana/web3.js");
+const {solanaConnection} = require("../utils/solanaSocket")
 // Initialize Firebase Admin SDK instances
 const initializedApps = {};
 
+
+
 // Initialize Firebase Admin SDK for a given app ID
+
+
+
 function initializeFirebaseAdmin(json, appId) {
   if (!initializedApps[appId]) {
     const firebaseApp = admin.initializeApp({
@@ -107,6 +112,59 @@ function initializeFirebaseAdmin(json, appId) {
     initializedApps[appId] = firebaseApp;
   }
 }
+
+const sendNotificationToOne = async (notification,token,appId) => {
+
+    try {
+        console.log("notifications ---------------------",notification)
+      const notificationBody = notification.body
+      const notificationTitle = notification.title
+      const notificationImage = notification.image;
+      
+      let service_account_url;
+  
+      const appSnapshot = await db.collection("apps").doc(appId).get();
+      if (!appSnapshot.exists) {
+        throw new Error("App not found");
+      }
+      const appData = appSnapshot.data();
+      service_account_url = appData.service_account
+  
+    const message = {
+      token: token,
+      notification: {
+        body: notificationBody,
+        title: notificationTitle,
+      },
+      apns: {
+        payload: {
+          aps: {
+            'mutable-content': 1,
+          },
+        },
+        fcmOptions: {
+          imageUrl: notificationImage,
+        },
+      },
+      android: {
+        notification: {
+          imageUrl: notificationImage,
+        },
+      },
+    };
+    const service_account_response = await fetch(service_account_url);
+    const service_account = await service_account_response.json();
+    initializeFirebaseAdmin(service_account, appId);
+  
+    const response = await initializedApps[appId].messaging().send(message);
+  
+    console.log("Successfully sent notifications:", response.responses[0].error);
+
+  } catch (err) {
+    console.error(err);
+  }
+  };
+
 
 exports.sendNotificationToAll = async (req, res) => {
   try {
@@ -180,3 +238,103 @@ exports.sendNotificationToAll = async (req, res) => {
 }
 };
 
+
+
+
+
+
+exports.subscribeAccountChangeNotifForOne = async(req,res)=>{
+  try{
+
+  
+      const appId = req.app.appId;
+      const userId = req.body.userId
+      const userSnap = await db.collection("users").doc(userId).get();
+      if (!userSnap.exists) {
+        throw new Error("App not found");
+      }
+      const userData = userSnap.data();
+
+      const appSnapshot = await db.collection("apps").doc(appId).get();
+      if (!appSnapshot.exists) {
+        throw new Error("App not found");
+      }
+      const appData = appSnapshot.data();
+const notification = appData.notificationAccountChanged
+      
+      const account = new PublicKey(userId)
+      const token = userData.notificationToken
+
+console.log("notification in web socket-------",notification)
+const subscriptionId = await solanaConnection.onAccountChange(
+    account,
+    (updatedAccountInfo) =>{
+console.log("notification in web socket-------",notification,token,appId)
+        
+
+    sendNotificationToOne(notification,token,appId)
+        console.log(`---Event Notification for ${account.toString()}--- \nNew Account Balance:`, updatedAccountInfo.lamports / LAMPORTS_PER_SOL, ' SOL')},
+    "confirmed"
+);
+console.log('Starting web socket, subscription ID: ', subscriptionId);
+      await db.collection("users").doc(userId).update({
+        accountChangeSubscriptionId:subscriptionId
+      })
+      res.status(200).json({message:"success"})}
+      catch(err){
+        console.log(err)
+        res.json({err})
+      }
+      
+  }
+
+
+exports.setNotificationForAccountChange = async(req,res)=>{
+    try{
+
+    
+    const notification = req.body.notification
+    const appId = req.app.appId;
+    const appSnapshot = await db.collection("apps").doc(appId).get();
+    if (!appSnapshot.exists) {
+      throw new Error("App not found");
+    }
+
+    await db.collection("apps").doc(appId).update(
+        {
+            notificationAccountChanged:notification
+        }
+    )
+    
+    return res.status(200).json({message:"success"})
+    }catch(err){
+        console.log(err)
+        res.json({err})
+    }
+
+}
+
+exports.helius = async(req,res)=>{
+  try{
+
+  
+  const notification = req.body.notification
+  const appId = req.app.appId;
+  const appSnapshot = await db.collection("apps").doc(appId).get();
+  if (!appSnapshot.exists) {
+    throw new Error("App not found");
+  }
+
+  await db.collection("apps").doc(appId).update(
+      {
+          notificationAccountChanged:notification
+      }
+  )
+  
+  return res.status(200).json({message:"success"})
+  }catch(err){
+      console.log(err)
+      res.json({err})
+  }
+
+}
