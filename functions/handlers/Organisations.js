@@ -9,8 +9,11 @@ const auth = getAuth(firebaseApp);
 
 
 function generateUniqueOrganisationId(name) {
-  // Ensure the name is at least 5 characters long
-  const truncatedName = name.slice(0, 5);
+  const trimmedName = name.replace(/\s/g, '');
+  
+  // Take the first 5 characters of the trimmed name
+  const truncatedName = trimmedName.slice(0, 5);
+  
   // Generate a random 5-character string
   const randomString = Math.random().toString(36).substring(2, 7);
 

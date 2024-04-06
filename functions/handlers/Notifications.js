@@ -166,8 +166,9 @@ const sendNotificationToOne = async (notification,token,appId) => {
   };
 
 
-exports.sendNotificationToAll = async (req, res) => {
+exports.sendNotificationToGroup = async (req, res) => {
   try {
+    const group = req.body.group
     const notificationBody = req.body.notificationBody;
     const notificationTitle = req.body.notificationTitle;
     const notificationImage = req.body.notificationImage;
@@ -176,7 +177,7 @@ exports.sendNotificationToAll = async (req, res) => {
 
     let tokens = [];
 
-
+let userIds;
 
     const appSnapshot = await db.collection("apps").doc(appId).get();
     if (!appSnapshot.exists) {
@@ -184,7 +185,19 @@ exports.sendNotificationToAll = async (req, res) => {
     }
     const appData = appSnapshot.data();
     service_account_url = appData.service_account
-    const userIds = appData.userIds || [];
+    if(group === "BROADCAST"){
+
+      userIds = appData.userIds || [];
+    }else{
+      const campaigns = appData.campaigns
+      const camp = campaigns[group]
+      if(!camp){
+        return res.status(400).json({err:"invalid group id"})
+      }else{
+
+        userIds = camp.users
+      }
+    }
 
     const usersData = await Promise.all(userIds.map(userId => {
       return db.collection("users").doc(userId).get()
@@ -239,7 +252,38 @@ exports.sendNotificationToAll = async (req, res) => {
 };
 
 
+exports.sendNotificationToOneUser = async(req,res)=>{
+  try{
 
+  
+    const notificationBody = req.body.notificationBody;
+    const notificationTitle = req.body.notificationTitle;
+    const notificationImage = req.body.notificationImage;
+    const userId = req.body.userId
+  const appId = req.app.appId;
+  const notification  = {
+    body:notificationBody,
+    title:notificationTitle,
+    image:notificationImage
+  }
+  const userSnapshot = await db.collection("users").doc(userId).get();
+  if (!userSnapshot.exists) {
+    throw new Error("user not found");
+  }
+  const userData = userSnapshot.data()
+  const token = userData.notificationToken
+
+  const response = await sendNotificationToOne(notification,token,appId)
+
+ 
+  
+  return res.status(200).json({message:"success"})
+  }catch(err){
+      console.log(err)
+      res.json({err})
+  }
+
+}
 
 
 
@@ -314,27 +358,27 @@ exports.setNotificationForAccountChange = async(req,res)=>{
 
 }
 
-exports.helius = async(req,res)=>{
-  try{
+// exports.helius = async(req,res)=>{
+//   try{
 
   
-  const notification = req.body.notification
-  const appId = req.app.appId;
-  const appSnapshot = await db.collection("apps").doc(appId).get();
-  if (!appSnapshot.exists) {
-    throw new Error("App not found");
-  }
+//   const notification = req.body.notification
+//   const appId = req.app.appId;
+//   const appSnapshot = await db.collection("apps").doc(appId).get();
+//   if (!appSnapshot.exists) {
+//     throw new Error("App not found");
+//   }
 
-  await db.collection("apps").doc(appId).update(
-      {
-          notificationAccountChanged:notification
-      }
-  )
+//   await db.collection("apps").doc(appId).update(
+//       {
+//           notificationAccountChanged:notification
+//       }
+//   )
   
-  return res.status(200).json({message:"success"})
-  }catch(err){
-      console.log(err)
-      res.json({err})
-  }
+//   return res.status(200).json({message:"success"})
+//   }catch(err){
+//       console.log(err)
+//       res.json({err})
+//   }
 
-}
+// }

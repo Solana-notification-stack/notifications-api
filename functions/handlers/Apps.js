@@ -4,7 +4,11 @@ const { uuid } = require("uuidv4");
 
 
 function generateUniqueAppId(name) {
-  const truncatedName = name.slice(0, 5);
+  const trimmedName = name.replace(/\s/g, '');
+  
+  // Take the first 5 characters of the trimmed name
+  const truncatedName = trimmedName.slice(0, 5);
+  
   const randomString = Math.random().toString(36).substring(2, 7);
   const appId = `App-${truncatedName.toUpperCase()}-${randomString.toUpperCase()}`;
   return appId;

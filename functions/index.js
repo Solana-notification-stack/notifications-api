@@ -15,7 +15,8 @@ const FBAuth = require("./utils/FBAuth");
 const AppAuth = require("./utils/AppAuth");
 const {createApp, deleteApp, getAppData} = require("./handlers/Apps");
 const { registerUserAsSubscriber } = require("./handlers/Users");
-const { sendNotificationToAll, setNotificationForAccountChange, subscribeAccountChangeNotifForOne } = require("./handlers/Notifications");
+const { sendNotificationToGroup, setNotificationForAccountChange, subscribeAccountChangeNotifForOne, sendNotificationToOneUser } = require("./handlers/Notifications");
+const { createCampaign, deleteCampaign, joinCampaign, removeUserFromCampaign } = require("./handlers/Campaigns");
 
 
 
@@ -37,10 +38,15 @@ app.post("/subscribeUser",AppAuth,registerUserAsSubscriber)
 
 
 //notifications
-app.post("/appSendNotification",AppAuth,sendNotificationToAll)
+app.post("/appSendNotificationToGroup",AppAuth,sendNotificationToGroup)
+app.post("/appSendNotificationToOneUser",AppAuth,sendNotificationToOneUser)
 app.post("/app/setAccountChangeNotification",AppAuth,setNotificationForAccountChange)
 app.post("/app/subscibeOneForAccountChange",AppAuth,subscribeAccountChangeNotifForOne)
 
-
+//campaigns
+app.post("/appCreateCampaign",AppAuth,createCampaign)
+app.post("/appDeleteCampaign/:campaignId",AppAuth,deleteCampaign)
+app.post("/appJoinCampaign/:campaignId",AppAuth,joinCampaign)
+app.post("/appUnsubscribeCampaign/:campaignId",AppAuth,removeUserFromCampaign)
 
 exports.api = onRequest(app);
